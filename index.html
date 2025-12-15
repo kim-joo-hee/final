@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>빨간 열매를 모으는 여우</title>
+	<meta name="description" content="이 글은 남들이 정한 성공의 상징인 빨간 열매를 무작정 모으던 여우가 다른 숲에서의 경험을 통해 그 기준의 허점을 깨닫는 과정을 그린 우화입니다.우리 사회가 주입하는 획일화된 성공과 행복의 기준에 대한 비판을 내포하며, 타인의 시선이 아닌 스스로의 마음이 이끄는 진정한 가치와 만족을 찾아야 한다는 메시지를 전합니다.">
+	<meta property="og:image" content="https://leebh.github.io/dimidifinal/thumbnail.png" /> 
+	
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+
+	<style>
+
+.hover-rotate {
+    transition: transform 0.5s ease-out; 
+}
+.hover-rotate:hover {
+    transform: rotate(360deg);
+}
+
+		@keyframes bounce-emphasize {
+    /* 시작: 흰색 (기존 텍스트 색상) */
+    0%, 100% { 
+        transform: scale(1); 
+        color: white; 
+    }
+    /* 튕길 때: 빨간색, 크기 1.3배 */
+    50% { 
+        transform: scale(1.3); 
+        color: red; 
+    }
+}
+
+		@keyframes pulse-effect {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; } /* 5% 커지며 밝아짐 */
+    100% { transform: scale(1); opacity: 0.8; }
+}
+
+		@keyframes pop-in {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(10px); /* 작고 아래에서 시작 */
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2) translateY(-5px); /* 잠시 오버슈트 (튀어 오름) */
+    }
+    99% { /* 튀어 오른 상태 유지 */
+        opacity: 1;
+        transform: scale(1) translateY(0); /* 원래 크기로 착지 */
+    }
+    100% { /* 순간적으로 다시 사라져서 (opacity: 0) 다음 반복 준비 */
+        opacity: 0;
+        transform: scale(1) translateY(0);
+    }
+}
+		/* k4.png (이미지)가 굴러가서 멈추는 애니메이션 (5초 주기) */
+@keyframes k4-roll {
+    0% {
+        transform: translateX(0) rotate(0deg);
+    }
+    38% { /* 1.9초: 충돌 직전까지 굴러가기 (550px 이동) */
+        transform: translateX(550px) rotate(360deg);
+    }
+    40% { /* 2.0초: 충돌 순간 (텍스트가 흔들리는 순간) */
+        transform: translateX(550px) rotate(360deg);
+    }
+    42% { /* 2.1초: 반동 */
+        transform: translateX(545px) rotate(358deg);
+    }
+    50% { /* 잠시 멈춤 */
+        transform: translateX(550px) rotate(360deg);
+    }
+    100% { /* 5초: 원래 위치로 복귀하며 반복 */
+        transform: translateX(0) rotate(720deg);
+    }
+}
+
+/* p (텍스트)가 충돌 순간에 흔들리는 애니메이션 (k4-roll과 동기화) */
+@keyframes text-impact {
+    0%, 39%, 45%, 100% { /* 대부분의 시간 동안 제자리에 유지 */
+        transform: translateX(0);
+    }
+    40% { /* 2.0초: 충돌 순간, 오른쪽으로 살짝 이동 */
+        transform: translateX(5px);
+    }
+    41% { /* 2.05초: 왼쪽으로 반동 */
+        transform: translateX(-5px);
+    }
+    42% { /* 2.1초: 제자리로 복귀 */
+        transform: translateX(3px);
+    }
+}
+		@keyframes pop-in {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(10px); /* 작고 아래에서 시작 */
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2) translateY(-5px); /* 잠시 오버슈트 (튀어 오름) */
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0); /* 원래 크기로 착지 */
+    }
+}
+		.hover-fade {
+    /* 기존 투명도 변화 트랜지션 대신, 크기 변화 트랜지션 적용 */
+    transition: transform 0.3s ease-in-out; 
+    /* 기본 크기 (1배) */
+    transform: scale(1);
+}
+
+/* 마우스를 올렸을 때 (Hover 상태): 1.1배로 확대 */
+.hover-fade:hover {
+    /* 이미지를 10% 확대 (원하는 크기로 변경 가능) */
+    transform: scale(1.1); 
+    /* 혹시 위치가 틀어질 경우, z-index를 높여 맨 앞으로 가져올 수 있습니다. */
+    /* z-index: 10; */
+}
+		@keyframes fade-repeat {
+    0% { opacity: 0; }     /* 완전히 투명 (사라짐) */
+    50% { opacity: 1; }    /* 완전히 불투명 (나타남) */
+    100% { opacity: 0; }   /* 다시 완전히 투명 */
+}
+
+		/* 부르르 떨림 애니메이션 정의 */
+@keyframes shake-and-pause {
+    /* 떨림 시작 - 0% ~ 10% (짧게 떨림) */
+    0% { transform: translateX(0); }
+    1% { transform: translateX(3px) rotate(0.5deg); }
+    2% { transform: translateX(-3px) rotate(-0.5deg); }
+    3% { transform: translateX(2px) rotate(0.3deg); }
+    4% { transform: translateX(-2px) rotate(-0.3deg); }
+    5% { transform: translateX(1px) rotate(0.1deg); }
+    10% { transform: translateX(0); }
+    
+    /* 멈춤 - 10% ~ 50% (긴 멈춤) */
+    50% { transform: translateX(0); }
+    
+    /* 두 번째 떨림 시작 - 50% ~ 60% (짧게 떨림) */
+    51% { transform: translateX(-4px) rotate(-0.7deg); }
+    52% { transform: translateX(4px) rotate(0.7deg); }
+    53% { transform: translateX(-3px) rotate(-0.5deg); }
+    54% { transform: translateX(3px) rotate(0.5deg); }
+    55% { transform: translateX(0); }
+
+    /* 멈춤 - 60% ~ 100% (긴 멈춤) */
+    100% { transform: translateX(0); }
+}
+
+		@keyframes rotate-only {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+		@keyframes twinkle {
+			0%, 100% {
+				transform: scale(1);       /* 원래 크기 */
+				filter: brightness(100%);  /* 원래 밝기 */
+			}
+			50% {
+				transform: scale(1.15);    /* 1.15배 커짐 */
+				filter: brightness(150%);  /* 150% 밝아짐 (더 빛나는 효과) */
+			}
+		}
+
+
+		@keyframes fall-and-roll {
+    0% { /* 시작 지점 */
+        transform: translateY(0) rotate(0deg); /* 원래 위치에서 시작 */
+        opacity: 0; /* 처음에는 투명하게 시작 */
+    }
+    20% { /* 살짝 나타나며 준비 */
+        opacity: 1;
+    }
+    80% { /* 거의 다 떨어졌을 때 */
+        transform: translateY(190px) rotate(270deg); /* 90px 떨어지면서 회전 */
+        opacity: 1;
+        animation-timing-function: ease-in; /* 떨어지는 동안 가속 */
+    }
+    100% { /* 착지 지점 */
+        transform: translateY(210px) rotate(360deg); /* 최종 100px 떨어짐, 한 바퀴 회전 */
+        opacity: 1;
+        animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275); /* 착지할 때 살짝 튕기는 효과 */
+    }
+}
+		@keyframes rotate-only-reverse {
+    0% { 
+        transform: rotate(0deg); 
+    }
+    100% { 
+        transform: rotate(-360deg); /* 마이너스 값으로 반대 방향 회전 */
+    }
+}
+		@keyframes rotate-only {
+    /* 0% (애니메이션 시작): 회전 각도 0도 */
+    0% { 
+        transform: rotate(0deg); 
+    }
+    /* 100% (애니메이션 종료): 회전 각도 360도 (한 바퀴) */
+    100% { 
+        transform: rotate(360deg); 
+    }
+}
+
+		/* 기본 초기화 */
+		body, h1, p { margin: 0; padding: 0; }
+		
+		/* 폰트 불러오기 */
+		@font-face {
+            font-family: 'SchoolSafetyRoundedSmile';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimDunggeunmisoTTF-R.woff2') format('woff2');
+            font-weight: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'SchoolSafetyRoundedSmile';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimDunggeunmisoTTF-B.woff2') format('woff2');
+            font-weight: 700;
+            font-display: swap;
+        }
+
+		/* 텍스트 스타일 */
+        p {
+			font-family: 'Noto Serif KR', serif;
+			color: white;
+			text-align: center;
+			word-break: keep-all;
+			width: 396px;
+			line-height: 27px;
+		}
+
+		h1, h2 {
+			font-family: 'SchoolSafetyRoundedSmile', sans-serif;
+			color: white;
+			text-align: center;
+			word-break: keep-all;
+		}
+
+		h1 {
+    font-size: 5rem;
+    margin-bottom: 10px;
+    position: absolute;
+    top: -301px;
+    left: 455px;
+    /* ▼▼▼ 글자 간격을 좁히는 코드 추가 ▼▼▼ */
+    letter-spacing: -10px; 
+}
+
+		h2 {
+			font-size: 2.5rem;
+			font-weight: normal;
+			position: absolute;
+			top: -406px;
+			left: 650px;
+		}
+		h3 {
+			font-size: 3.5rem;
+			font-weight: normal;
+			position: absolute;
+			
+			font-family: 'SchoolSafetyRoundedSmile', sans-serif;
+			color: black;
+			text-align: center;
+			word-break: keep-all;
+		}
+
+
+		/* 배경 설정 */
+		header.a1 {
+			background-image: url('a1.png'); 
+			background-size: cover; 
+			background-position: center; 
+			background-repeat: no-repeat;
+			height: 1076px; 
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.b1 {
+			background-image: url('b1.png'); 
+			background-size: cover; 
+			background-position: center; 
+			background-repeat: no-repeat;
+			height: 1076px; 
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+            position: relative; /* absolute 자식들을 위해 필요 */
+		}
+		.c1 {
+			background-image: url('c1.png'); 
+			background-size: cover; 
+			background-position: center; 
+			background-repeat: no-repeat;
+			height: 1076px; 
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+            position: relative; /* absolute 자식들을 위해 필요 */
+		}
+		.d1 {
+			background-image: url('d1.png'); 
+			background-size: cover; 
+			background-position: center; 
+			background-repeat: no-repeat;
+			height: 165px; 
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+            position: relative; /* absolute 자식들을 위해 필요 */
+		}
+		.e1 {
+			background-image: url('e1.png'); 
+			background-size: cover; 
+			background-position: center; 
+			background-repeat: no-repeat;
+			top: 400px;
+			height: 1812px; 
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+            position: relative; /* absolute 자식들을 위해 필요 */
+		}
+		.f1 {
+			background-image: url('f1.png'); 
+			background-size: cover; 
+			background-position: center; 
+			background-repeat: no-repeat;
+			top: 455px;
+			height: 765px; 
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+            position: relative; /* absolute 자식들을 위해 필요 */
+		}
+		.j1 {
+			background-image: url('j1.png'); 
+			background-size: cover; 
+			background-position: center; 
+			background-repeat: no-repeat;
+			top: -819px;
+			height: 4001px; 
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+            position: relative; /* absolute 자식들을 위해 필요 */
+		}
+		.k2 {
+			background-image: url('k2.png'); 
+			background-size: cover; 
+			background-position: center; 
+			background-repeat: no-repeat;
+			top: -824px;
+			height: 322px; 
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+            position: relative; /* absolute 자식들을 위해 필요 */
+		}
+		.k3 {
+			background-image: url('k2.png'); 
+			background-size: cover; 
+			background-position: center; 
+			background-repeat: no-repeat;
+			top: -824px;
+			height: 2692px; 
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+            position: relative; /* absolute 자식들을 위해 필요 */
+		}
+		.l1 {
+			background-image: url('l1.png'); 
+			background-size: cover; 
+			background-position: center; 
+			background-repeat: no-repeat;
+			top: -824px;
+			height: 822px; 
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+            position: relative; /* absolute 자식들을 위해 필요 */
+		}
+		.n1 {
+			background-image: url('n1.png'); 
+			background-size: cover; 
+			background-position: center; 
+			background-repeat: no-repeat;
+			top: -824px;
+			height: 822px; 
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+            position: relative; /* absolute 자식들을 위해 필요 */
+		}
+		.m1 {
+			background-image: url('m1.png'); 
+			background-size: cover; 
+			background-position: center; 
+			background-repeat: no-repeat;
+			top: -574px;
+			height: 1300px; 
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+            position: relative; /* absolute 자식들을 위해 필요 */
+		}
+		.o1 {
+			background-image: url('o1.png'); 
+			background-size: cover; 
+			background-position: center; 
+			background-repeat: no-repeat;
+			top: -574px;
+			height: 1300px; 
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+            position: relative; /* absolute 자식들을 위해 필요 */
+		}
+		.p1 {
+			background-image: url('p1.png'); 
+			background-size: cover; 
+			background-position: center; 
+			background-repeat: no-repeat;
+			top: -574px;
+			height: 1730px; 
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+            position: relative; /* absolute 자식들을 위해 필요 */
+		}
+
+
+		.wrap {
+			width: 100%;
+			max-width: 100%;
+			margin: auto;
+			/* background: rgba(0,0,0,0.5); 디버깅용 배경 제거 */
+			position: relative; 
+		}
+
+		img {
+			max-width: 100%;
+			height: auto;
+		}
+        
+        /* ▼▼▼ 발자국 애니메이션 코드 시작 ▼▼▼ */
+        
+        @keyframes walk-animation {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .footprint {
+            opacity: 0; /* 시작할 때 안 보이게 */
+            animation: walk-animation 4s infinite; /* 4초 주기로 반복 */
+        }
+
+        /* nth-of-type을 사용해 순서대로 딜레이 적용 */
+        .footprint:nth-of-type(1) { animation-delay: 0s; }
+        .footprint:nth-of-type(2) { animation-delay: 1s; }
+        .footprint:nth-of-type(3) { animation-delay: 2s; }
+        .footprint:nth-of-type(4) { animation-delay: 3s; }
+
+        /* ▲▲▲ 발자국 애니메이션 코드 끝 ▲▲▲ */
+
+	</style>
+</head>
+<body>
+
+	<header class="a1">
+		<div class="wrap">
+			<h1>
+                <span style="color: red;">
+                    <span style="display: inline-block; opacity: 0; animation: pop-in 0.8s ease-out forwards; animation-delay: 0.1s;">빨</span>
+                    <span style="display: inline-block; opacity: 0; animation: pop-in 0.8s ease-out forwards; animation-delay: 0.2s;">간</span>
+                    <span style="display: inline-block; opacity: 0; animation: pop-in 0.8s ease-out forwards; animation-delay: 0.3s;"> </span>
+                    <span style="display: inline-block; opacity: 0; animation: pop-in 0.8s ease-out forwards; animation-delay: 0.4s;">열</span>
+                    <span style="display: inline-block; opacity: 0; animation: pop-in 0.8s ease-out forwards; animation-delay: 0.5s;">매</span>
+                    <span style="display: inline-block; opacity: 0; animation: pop-in 0.8s ease-out forwards; animation-delay: 0.6s;">를</span>
+				</span>
+                
+                <span style="display: inline-block; opacity: 0; animation: pop-in 0.8s ease-out forwards; animation-delay: 0.7s;"> </span>
+                <span style="display: inline-block; opacity: 0; animation: pop-in 0.8s ease-out forwards; animation-delay: 0.8s;">모</span>
+                <span style="display: inline-block; opacity: 0; animation: pop-in 0.8s ease-out forwards; animation-delay: 0.9s;">으</span>
+                <span style="display: inline-block; opacity: 0; animation: pop-in 0.8s ease-out forwards; animation-delay: 1.0s;">는</span>
+                <span style="display: inline-block; opacity: 0; animation: pop-in 0.8s ease-out forwards; animation-delay: 1.1s;"> </span>
+                <span style="display: inline-block; opacity: 0; animation: pop-in 0.8s ease-out forwards; animation-delay: 1.2s;">여</span>
+                <span style="display: inline-block; opacity: 0; animation: pop-in 0.8s ease-out forwards; animation-delay: 1.3s;">우</span>
+			</h1>
+			
+			<h2>
+				당신의 열매를 찾아가는 여정
+			</h2>
+
+			<img src="a22.png" style="height: 182px; position: absolute; top: 395px;">	
+		</div>
+	</header>
+
+	<section class="b1">
+		<div class="wrap">
+			<p style="position: absolute; top:-229px; left: 700px;">
+                옛날, 숲 속에는 여우들이 모여 사는 마을이 있었어요. 그 숲에는 빨간 열매가 아주 귀하게 열리기 때문에 누구나 봄이 오면 붉은 열매를 찾아 여기저기 뛰어 다녔어요.
+            </p>
+			<p style="position: absolute; top:224px; left: 645px;">
+		        그중에서도 가장 부지런한 여우가 있었어요. 그 여우는 아침 일찍 일어나 남들보다 먼저 열매를 따러 갔어요. 
+            </p>
+
+            <img src="b2.png" class="footprint" style="position: absolute; top:-530px; left: 800px;">
+            <img src="b2.png" class="footprint" style="position: absolute; top:-360px; left: 900px;">
+            <img src="b2.png" class="footprint" style="position: absolute; top:-100px; left: 800px;">
+            <img src="b2.png" class="footprint" style="position: absolute; top:90px; left: 900px;">
+		</div>
+	</section>
+	<section class="c1">
+		<div class="wrap">
+			<h3 style="top:-69px; left: 300px;">
+               “빨간 열매는 귀해. 많이 모아서 동굴에 숨겨 놓을거야!”
+            </h3>
+            <img src="c2.png" style="position: absolute; top:-1418px; left: -4px; height:1715px; width:auto;"
+                >
+                <img src="c3.png" style="position: absolute; top:-950px; left: 500px; height:auto; width:1220px;
+                animation: shake-and-pause 3s infinite;"
+                >
+                <img src="c4.png" style="position: absolute; top:-1221px; left: 982px; height:323px; width:auto;
+    /* 기존 apple-subtle-roll 관련 설정 제거 (혹시 있다면) */
+    /* 여기서 애니메이션 추가 */
+    animation: fall-and-roll 2s infinite; /* 2초 동안 진행, 최종 상태 유지 */
+">
+                <img src="c5.png" style="height: 182px; 
+                position: absolute; 
+                top: 359px;
+                width: 100%;">
+			
+
+            
+		</div>
+	</section>
+
+	
+	<section class="d1">
+		<div class="wrap">
+			<p style="position: absolute; top:157px; left: 700px; color: black;">
+여우는 하루 종일 뛰어다니며 열매를 모았어요. 작은 굴 속에는 반짝이는 붉은 열매가 점점 쌓였죠 밤이 되면 여우는 그 열매들을 바라보며 뿌듯해했어요.            </p>
+
+         
+               <img src="d2.png" style="height: 534px; position: absolute; top: 11px;
+               left: 21px;
+              animation: rotate-only-reverse 4s linear infinite;
+               ">
+              <img src="d3.png" style="height: 354px; position: absolute; top: -227px; left: 300px; 
+    /* 여기서부터 애니메이션 추가 */
+    animation: rotate-only 4s linear infinite; 
+">
+</section>
+	<section class="e1">
+		<div class="wrap">
+			
+    
+                <img src="e2.png" style="height: 182px; 
+                position: absolute; 
+                top: -910px;
+                width: 100%;">
+
+                <img src="e3.png" style="height: 399px; 
+                 position: absolute; 
+                 top: -360px; 
+                 left: 700px;
+                 animation: twinkle 2s infinite ease-in-out;">
+                 <img src="e4.png" style="height: 182px; 
+                position: absolute; 
+                top: 750px;
+                width: 100%;">
+			
+
+			
+
+            
+		</div>
+	
+
+	</section>
+	<section class="f1">
+		<div class="wrap">
+			<img src="f2.png" style="height: 534px; position: absolute; top: -252px;
+               left: 400px;
+            
+               ">
+         <img src="f3.png" style="height: 430px; position: absolute; top: -550px; left: 300px; animation: rotate-only 4s linear infinite;">
+         <img src="f4.png" style="height: 287px; position: absolute; top: -212px; left: 250px; animation: rotate-only 4s linear infinite;">
+         <img src="f5.png" style="height: 110px; position: absolute; top: 37px; left: 390px; animation: rotate-only 4s linear infinite;">
+         <img src="f6.png" style="height: 292px; position: absolute; top: -95px; left: 1178px; animation: rotate-only 4s linear infinite;">
+         <img src="f7.png" style="height: 200px; position: absolute; top: 163px; left: 1139px; animation: rotate-only 4s linear infinite;">
+         <img src="f8.png" style="height: 79px; position: absolute; top: -133px; left: 1224px; animation: rotate-only 4s linear infinite;">
+         <h3 style="top:-238px; 
+              left: 690px;
+              font-size: 4rem;
+              animation: shake-and-pause 3s infinite;">
+               “으악 너무 써”
+            </h3>
+            <p style="position: absolute; top:331px; left: 670px; color: black;">
+하지만 이상했어요.다른 여우들은 맛있어서 꿀떡 꿀떡 삼키는 열매를 먹어보면 너무 써서 한입도 삼키기 힘들었거든요.         </p>
+
+
+        </div>
+	</section>
+
+	
+	<section class="j1">
+		<div class="wrap">
+		<img src="j2.png" style="height: 904px; position: absolute; top: -182px;
+               left: 400px;
+            
+               ">
+                <h3 style="top:-313px; 
+              left: 370px;
+              font-size: 3rem;
+              font-weight: bold;opacity: 0; 
+              animation: fade-repeat 4s infinite;">
+               그래도 여우는 멈추지 않았어요. 
+              </h3>
+              <h3 style="top:715px; 
+              left: 700px;
+              font-size: 3rem;
+              font-weight: bold;
+              color: red;
+              opacity: 0;
+              animation: fade-repeat 4s infinite;">
+               다른 여우들이 부러워하는 눈빛이 <br>너무 달콤했기 때문이에요.
+              </h3>
+              <img src="b2.png" class="footprint" style="position: absolute; top:970px; left: 800px;">
+              <img src="b2.png" class="footprint" style="position: absolute; top:1140px; left: 900px;">
+              <img src="b2.png" class="footprint" style="position: absolute; top:1310px; left: 810px;">
+              <img src="b2.png" class="footprint" style="position: absolute; top:1500px; left: 870px;">
+
+
+		
+
+
+        </div>
+	</section>
+
+	<section class="k2">
+		<div class="wrap">
+	<p style="position: absolute; top:97px; left: 400px; color: white; font-size: 1.5rem; font-weight: bold; white-space: nowrap;">
+그러던 어느 날, 여우는 우연히 다른 숲에 놀러 갔어요.        </p>
+
+
+        </div>
+	</section>
+	<section class="l1">
+		<div class="wrap">
+	
+        </div>
+	</section>
+
+	<section class="k3">
+		<div class="wrap">
+			<img src="k4.png" style="height: 135px; position: absolute; top: -1330px;
+               left: 200px;
+               animation: k4-roll 5s linear infinite;
+            
+               ">
+<p style="position: absolute; top:-1290px; left: 900px; color: white; font-size: 1.5rem; font-weight: bold; white-space: nowrap;
+    line-height: 40px;
+    animation: text-impact 5s linear infinite;">
+그곳에는 빨간 열매가  주렁주렁 열려 있었어요.<br>하지만 놀랍게도, 아무도 따지 않았어요!         </p>
+             
+             <img src="l4.png" class="hover-fade" style="height: 324px; position: absolute; top: 11px;
+               left: 250px;
+            
+               ">
+             <img src="l3.png" class="hover-fade" style="height: 544px; position: absolute; top: -947px;
+               left: 1000px;
+            
+               ">
+               <img src="l2.png" class="hover-fade" style="height: 904px; position: absolute; top: -700px;
+               left: 400px;
+            
+               ">
+               <p style="position: absolute; top:-830px; left: 395px; color: white; font-size: 1.5rem; font-weight: bold; white-space: nowrap;
+                   text-align: left;
+                   line-height: 40px;">
+대신 그 숲의 여우들은 자신의 동굴 앞에 잔뜩 <br>열려 있었던 파란 열매를 소중히 아꼈어요.        </p>
+            <img src="b2.png" class="footprint" style="position: absolute; top:280px; left: 800px;">
+            <img src="b2.png" class="footprint" style="position: absolute; top:450px; left: 900px;">
+            <img src="b2.png" class="footprint" style="position: absolute; top:640px; left: 800px;">
+            <img src="b2.png" class="footprint" style="position: absolute; top:840px; left: 900px;">
+
+	
+        </div>
+	</section>
+			
+
+     
+	<section class="n1">
+		<div class="wrap">
+			<img src="c5.png" style="height: 182px; 
+                position: absolute; 
+                top: -580px;
+                width: 100%;">
+                <p style="position: absolute; top:-192px; left: 400px; color: red; font-size: 1.7rem; font-weight: bold; white-space: nowrap;
+ text-align: left;
+ line-height: 70px;">
+여우는 물었어요
+</p>
+<p style="position: absolute; top:-113px; left: 400px; color: black; font-size: 2rem; font-weight: bold; white-space: nowrap;
+ text-align: left;
+line-height: 70px;">
+“빨간 열매가 이렇게 많은데, 왜 아무도 안 따요?” </p>
+<p style="position: absolute; top:267px; left: 870px; color: blue; font-size: 1.7rem; font-weight: bold; white-space: nowrap;
+ text-align: left;
+line-height: 70px;">
+그 숲의 여우가 웃으며 대답했어요.</p>
+<p style="position: absolute; top:346px; left: 840px; color: black; font-size: 2rem; font-weight: bold; white-space: nowrap;
+ text-align: left;
+ line-height: 70px;">
+“그건 너무 써서 아무도 안 먹어.<br>
+</p>
+<p style="position: absolute; top:417px; left: 732px; color: black; font-size: 2rem; font-weight: bold; white-space: nowrap;
+text-align: left;
+line-height: 70px;">
+우린 파란 열매가 제일 맛있다고 생각해.”<br>
+</p>
+<img src="n2.png" style="position: absolute; top:58px; left: 900px;
+
+animation: pop-in 0.8s ease-out infinite;
+animation-delay: 0.5s;">
+
+<img src="n3.png" style="position: absolute; top:63px; left: 810px;
+animation: pop-in 0.8s ease-out infinite;animation-delay: 0.7s;">
+
+<img src="n2.png" style="position: absolute; top:58px; left: 700px;
+animation: pop-in 0.8s ease-out infinite; animation-delay: 0.9s;">
+
+            
+			
+	
+        </div>
+	</section>
+
+	<section class="m1">
+		<div class="wrap">
+			<img src="e2.png" style="height: 182px; 
+                position: absolute; 
+                top: -660px;
+                width: 100%;
+                ">
+            <h3 style="top:-69px; left: 550px; color: white; font-weight: bold;
+       ">
+여우는 멍하니 서 있었어요.
+ </h3>
+<h3 style="top:31px; left: 200px; color: white; font-weight: bold;
+           animation: pulse-effect 3s ease-in-out infinite;">
+ “빨간 열매는 우리숲에선 귀한데... 이곳에선 그렇지 않네?”
+ </h3>
+
+	
+        </div>
+	</section>
+
+
+	<section class="o1">
+		<div class="wrap">
+			<img src="o2.png" class="hover-fade" style="height: 904px; position: absolute; top: -560px;
+left: -20px;
+">
+			<h3 style="top:-69px; left: 550px; color: white; font-weight: bold;">
+어느 누구도 <span style="display: inline-block; animation: bounce-emphasize 1.5s ease-in-out infinite;">“왜”</span> 라고 묻지 않았던 거예요.
+         </h3>
+<p style="position: absolute; top:-403px; left: 400px; color: white; font-size: 1.5rem; font-weight: bold; white-space: nowrap;">
+그제야 여우는 알게 되었어요. 빨간 열매가 귀한 이유는,<br>모두가 그렇게 믿었기 때문이라는 걸요.</p>
+            <img src="b2.png" class="footprint" style="position: absolute; top:170px; left: 800px;">
+            <img src="b2.png" class="footprint" style="position: absolute; top:340px; left: 900px;">
+            <img src="b2.png" class="footprint" style="position: absolute; top:526px; left: 800px;">
+
+
+
+	
+ </div>
+	</section>
+
+
+	<section class="o1">
+		<div class="wrap">
+			
+<p style="position: absolute; top:-653px; left: 400px; color: white; font-size: 1.5rem; font-weight: bold; white-space: nowrap;
+line-height: 40px;">
+그날 이후 여우는 열매를 모으지 않았어요.<br>대신 천천히 주변을 돌아다니며 직접 맛을 보았죠.<br>달콤한 열매, 시큼한 열매, 향긋한 열매…</p>
+<img src="o3.png" class="hover-fade" style="height: 794px; position: absolute; top: -424px;
+               left: 190px;
+            
+               ">
+               <p style="position: absolute; top:500px; left: 800px; color: white; font-size: 1.5rem; font-weight: bold; white-space: nowrap;
+line-height: 40px;">
+그중에서 여우가 가장 좋아한 건, 작은 노란 열매였어요.</p>
+
+
+           
+
+
+	
+ </div>
+	</section>
+
+
+	<section class="p1">
+		<div class="wrap">
+			<img src="p2.png" style="height: 712px; 
+                position: absolute; 
+                top: -880px;
+                width: 100%;">
+                 <h3 style="top:-799px; left: 400px; color: yellow; font-weight: bold;
+       ">
+누구도 귀하게 여기지 않던 그 열매가<br>여우의 혀에는 세상에서 제일 맛있었거든요.
+ </h3>
+         <img src="p3.png" class="hover-rotate" style="height: 544px; position: absolute; top: -207px;
+left: 620px;
+">
+ <img src="p3.png" class="hover-rotate" style="height: 544px; position: absolute; top: -509px;
+left: 220px;
+">
+ <img src="p3.png" class="hover-rotate" style="height: 544px; position: absolute; top: 104px;
+left: 1020px;
+">
+	
+         </div>
+	</section>
+
+	<section class="o1" style="
+	height: 500px;">
+		<div class="wrap">
+			<img src="p4.png" style="height: 400px; 
+                position: absolute; 
+                top: -610px;
+                width: 100%;">
+
+        <p style="position: absolute; top:-23px; left: 500px; color: white; font-size: 1.5rem; font-weight: bold; white-space: nowrap;
+line-height: 40px;">
+그 뒤로 여우는 남의 눈이 아닌 자기 마음으로 숲을 바라보며 살았답니다.</p>
+<img src="c5.png" style="height: 182px; 
+                position: absolute; 
+                top: 69px;
+                width: 100%;">
+
+              
+
+<p style="position: absolute; top:347px; left: 570px; color: red; font-size: 2rem; font-weight: bold; white-space: nowrap;
+line-height: 40px;">
+작품 설명 – 「빨간 열매를 모으는 여우」</p>
+
+<p style="position: absolute; top:440px; left: 250px; color: black;text-align: left;">
+                이 동화는 남이 정한 기준이 아닌, 스스로 선택한 삶을 살자는 메시지를 담고 있다. 우리 사회는 모두가 비슷한 욕망을 품도록 만들어져 있다. 성적, 부, 외모, 권력 같은 것들이 행복의 조건처럼 여겨지지만, 그것은 사회가 만들어 놓은 기준일 뿐이다.
+            </p>
+
+            <p style="position: absolute; top:440px; left: 670px; color: black;text-align: left;">
+                주인공 여우는 숲에서 ‘빨간 열매’를 성공의 상징으로 믿고 끊임없이 모은다. 그러나 다른 숲에 가서 그 열매가 아무 가치도 없다는 사실을 알게 되면서, 세상의 기준이 절대적이지 않다는 걸 깨닫는다.
+            </p>
+
+            <p style="position: absolute; top:440px; left: 1100px; color: black;text-align: left;">
+                여우의 이야기는 결국 타인의 기준이 아닌 나만의 기준으로 살아가는 용기를 말한다. 진짜 행복은 남의 시선이 아니라, 스스로의 선택에서 비롯된다.
+            </p>
+
+            <p style="position: absolute; top:750px; left: 450px; color: red;text-align: left;
+            white-space: nowrap;">
+                Seoul National Univ. of Science & Tech, Visual Design kimJooHee | Email: zoe0414@naver.com | Instagram: juhyi_06
+            </p>
+
+          <img src="footer.png" style="height: 4px; 
+                position: absolute; 
+                top: 709px;
+                width: 100%;">
+
+
+			
+	
+         </div>
+	</section>
+
+
+
+
+</body>
+</html>
+
+
+	
+
+
+
+
+
+
+
+</body>
+</html>
